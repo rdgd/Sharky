@@ -5,6 +5,7 @@ module.exports = function(grunt) {
     jshint: {
       files: ['Gruntfile.js', 'dev/js/**/*.js'],
       options: {
+        esnext: true,
         globals: {
           jQuery: true
         }
@@ -13,7 +14,7 @@ module.exports = function(grunt) {
     jscs: {
       src: "dev/**/*.js",
       options: {
-        esnext: false,
+        esnext: true,
         verbose: true,
         config: 'jscs.json' // See http://jscs.info/rules for options
       }
@@ -51,6 +52,14 @@ module.exports = function(grunt) {
         keepalive: false,
         module: {
           loaders: [
+            {
+              test: /\.js$/,
+              exclude: /node_modules/,
+              loader: "babel-loader",
+              query: {
+                presets: ['es2015']
+              }
+            },
             {
               test: /\.scss$/,
               loaders: ["style", "css", "sass"]

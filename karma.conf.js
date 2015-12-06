@@ -23,15 +23,36 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'dev/**/*.js': ['commonjs']
+      'dev/**/*.js': ['babelSourceMap', 'commonjs']
     },
 
+    // npm karma-babel-preprocessor
+    customPreprocessors: {
+      babelSourceMap: {
+        base: 'babel',
+        options: {
+          presets: ['es2015'],
+          sourceMap: 'inline'
+        }
+      }
+    },
+
+    coverageReporter: {
+      instrumenters: { isparta : require('isparta') },
+      instrumenter: {
+        'dev/**/*.js': 'isparta'
+      },
+      dir: 'dev/tests/reports/coverage/',
+      reporters: [
+        {type: 'html'},
+        {type: 'text-summary'}
+      ]
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
-
 
     // web server port
     port: 9876,
