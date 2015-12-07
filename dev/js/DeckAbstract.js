@@ -1,12 +1,15 @@
 import AbstractClass from './AbstractClass.js';
 
 class DeckAbstract extends AbstractClass {
-  constructor () {
+  constructor (options) {
     super({
-      name: 'DeckAbstract',
       methods: ['shuffle', 'drawCards', 'cut'],
       properties: ['cards']
     });
+  }
+
+  prePropertyCheck () {
+    this._addCards.call(this);
   }
 }
 

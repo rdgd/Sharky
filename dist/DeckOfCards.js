@@ -293,30 +293,23 @@
 	  function Deck(options) {
 	    _classCallCheck(this, Deck);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this));
-
-	    _this.options = options ? options : {};
-	    _this.cards = [];
-
-	    if (_this.options.cards) {
-	      _this.cards = _this.options.cards;
-	    } else {
-	      _this._addCards();
-	    }
-
-	    document.addEventListener('click', function () {
-	      alert('hey');
-	    });
-	    console.log('constructed');
-	    return _this;
+	    options = options ? options : {};
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this, options));
 	  }
 
 	  _createClass(Deck, [{
 	    key: '_addCards',
-	    value: function _addCards() {
+	    value: function _addCards(cards) {
 	      var suits = ['S', 'C', 'D', 'H'];
 	      var faceValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
 
+	      if (!this.cards) {
+	        this.cards = [];
+	      }
+	      if (cards) {
+	        this.cards = cards;
+	        return cards;
+	      }
 	      // We need one value of every suit. Mixed-type array is a nice nicety here.
 	      for (var i = 0; i < suits.length; i++) {
 	        for (var x = 0; x < faceValues.length; x++) {
@@ -391,6 +384,8 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -410,15 +405,21 @@
 	var DeckAbstract = (function (_AbstractClass) {
 	  _inherits(DeckAbstract, _AbstractClass);
 
-	  function DeckAbstract() {
+	  function DeckAbstract(options) {
 	    _classCallCheck(this, DeckAbstract);
 
 	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckAbstract).call(this, {
-	      name: 'DeckAbstract',
 	      methods: ['shuffle', 'drawCards', 'cut'],
 	      properties: ['cards']
 	    }));
 	  }
+
+	  _createClass(DeckAbstract, [{
+	    key: 'prePropertyCheck',
+	    value: function prePropertyCheck() {
+	      this._addCards.call(this);
+	    }
+	  }]);
 
 	  return DeckAbstract;
 	})(_AbstractClass3.default);
@@ -440,50 +441,42 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AbstractClass = (function () {
-	  function AbstractClass(options) {
+	  function AbstractClass(contract) {
 	    _classCallCheck(this, AbstractClass);
 
-	    if (this.__proto__.methodsImplemented) {
-
+	    if (!contract) {
 	      return false;
 	    }
 
-	    if (!options) {
-	      return false;
-	    }
-	    if (!options.name) {
-	      throw 'You must provide a name for your abstract class';
+	    var implementation = this.__proto__;
+	    var definition = implementation.__proto__;
+	    var enforcer = definition.__proto__;
+
+	    definition.methods = !contract.methods ? [] : contract.methods;
+	    definition.properties = !contract.properties ? [] : contract.properties;
+
+	    if (this.constructor.name === enforcer.constructor.name) {
+	      throw 'You may not name your class "' + this.constructor.name + '"';
 	    }
 
-	    /*
-	       The context here is the implementing class. And we want these properties
-	       to be of the abstract class it is implementing
-	    */
-	    this.__proto__.name = options.name;
-	    this.__proto__.methods = !options.methods ? [] : options.methods;
-	    this.__proto__.properties = !options.properties ? [] : options.properties;
-
-	    if (this.constructor === AbstractClass || this.constructor.name === this.__proto__.name) {
+	    if (this.constructor === AbstractClass || this.constructor === definition.constructor) {
 	      throw 'You may not instantiate an abstract class directly.';
 	    }
 
-	    this.methodsAreImplemented();
+	    if (definition.preMethodCheck) {
+	      definition.preMethodCheck.call(this.__proto__);
+	    }
+	    this.checkMethods();
 
-	    // this.constructor = function (callback) {
-	    //   return function () {
-	    //     console.log('calling the constructor again');
-	    //     this.constructor();
-	    //     this.propertiesAreImplemented();
-	    //     return false;
-	    //   }.bind(this);
-	    // }.call(this)();
-	    // return false;
+	    if (definition.prePropertyCheck) {
+	      definition.prePropertyCheck.call(this.__proto__);
+	    }
+	    this.checkProperties();
 	  }
 
 	  _createClass(AbstractClass, [{
-	    key: 'methodsAreImplemented',
-	    value: function methodsAreImplemented() {
-	      console.log('checking methods');
+	    key: 'checkMethods',
+	    value: function checkMethods() {
 	      var implemented = true;
 	      var _iteratorNormalCompletion = true;
 	      var _didIteratorError = false;
@@ -512,13 +505,10 @@
 	          }
 	        }
 	      }
-
-	      this.__proto__.methodsImplemented = implemented;
 	    }
 	  }, {
-	    key: 'propertiesAreImplemented',
-	    value: function propertiesAreImplemented() {
-	      console.log('checking props');
+	    key: 'checkProperties',
+	    value: function checkProperties() {
 	      var implemented = true;
 	      var _iteratorNormalCompletion2 = true;
 	      var _didIteratorError2 = false;
@@ -528,7 +518,7 @@
 	        for (var _iterator2 = this.__proto__.properties[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	          var property = _step2.value;
 
-	          implemented = this.hasOwnProperty(property);
+	          implemented = this.__proto__.hasOwnProperty(property);
 	          if (!implemented) {
 	            throw 'You must implement the property "' + property + '" specified by the abstract class';
 	          }
@@ -547,8 +537,6 @@
 	          }
 	        }
 	      }
-
-	      this.__proto__.propertiesImplemented = implemented;
 	    }
 	  }]);
 

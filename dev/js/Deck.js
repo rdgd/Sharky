@@ -7,24 +7,19 @@ import Card from './Card.js';
 */
 class Deck extends DeckAbstract {
   constructor (options) {
-    super(); 
-    this.options = options ? options : {};
-    this.cards = [];
-
-    if (this.options.cards) {
-      this.cards = this.options.cards;
-    } else {
-      this._addCards();
-    }
-
-    document.addEventListener('click', function () { alert('hey'); });
-    console.log('constructed');
+    options = options ? options : {};
+    super(options);
   }
 
-  _addCards () {
+  _addCards (cards) {
     var suits = ['S', 'C', 'D', 'H'];
     var faceValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
 
+    if (!this.cards) { this.cards = []; }
+    if (cards) {
+      this.cards = cards;
+      return cards;
+    }
     // We need one value of every suit. Mixed-type array is a nice nicety here.
     for (var i = 0; i < suits.length; i++) {
       for (var x = 0; x < faceValues.length; x++) {
