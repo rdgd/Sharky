@@ -2,15 +2,15 @@
   Cards have a face value, numeric value, and a suit.
   I dislike the aesthetic of switch statements, heh.
 */
-function Card (faceValue, suit) {
-  this.value = null;
-  this.suit = suit.toUpperCase();
-  this.faceValue = faceValue;
-  this._setValue(faceValue);
-}
+class Card {
+  constructor (faceValue, suit) {
+    this.value = null;
+    this.suit = suit.toUpperCase();
+    this.faceValue = faceValue;
+    this._setValue(faceValue);
+  }
 
-Card.prototype = {
-  _setValue: function (faceValue) {
+  _setValue (faceValue) {
     var faceValueInt = parseInt(faceValue);
     var isNumeric = !isNaN(faceValueInt);
     var faceCards = ['J', 'Q', 'K', 'A'];
@@ -44,20 +44,20 @@ Card.prototype = {
     }
 
     return this.value;
-  },
+  }
 
-  getValue: function () {
+  getValue () {
     return this.value;
-  },
+  }
 
-  toPlainEnglish: function () {
+  toPlainEnglish () {
     var card = this.getCardValueName();
     var suit = this.getSuitName();
 
     return card + ' of ' + suit;
-  },
+  }
 
-  getCardValueName: function () {
+  getCardValueName () {
     var cardName = null;
     switch (this.faceValue) {
       case 'J': {
@@ -83,9 +83,9 @@ Card.prototype = {
     }
 
     return cardName;
-  },
+  }
 
-  getSuitName: function () {
+  getSuitName () {
     var suitName = null;
     switch (this.suit) {
       case 'S': {
@@ -109,6 +109,6 @@ Card.prototype = {
 
     return suitName;
   }
-};
+}
 
-module.exports = Card;
+export default Card;

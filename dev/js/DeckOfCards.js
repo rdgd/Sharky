@@ -1,6 +1,6 @@
-var Deck = require('./Deck.js');
-var Player = require('./Player.js');
-var util = require('./util.js');
+import Util from './util.js';
+import Deck from './Deck.js';
+import Player from './Player.js';
 
 /*
   Comparison of cards isn't something intrisic to a Deck. It is more a function of a game.
@@ -8,25 +8,25 @@ var util = require('./util.js');
   anything more than that is a guaranteed tie for first... Approaching that limit
   increases the liklihood of a tie, though.
 */
-function Game (options) {
-  this.options = {};
-  this.winner = null;
-  this.deck = new Deck();
-  this.players = [];
+class Game {
+  constructor (options) {
+    this.options = {};
+    this.winner = null;
+    this.deck = new Deck();
+    this.players = [];
 
-  var defaultOptions = {
-    players: ['player1', 'player2'],
-    startImmediately: true
-  };
+    var defaultOptions = {
+      players: ['player1', 'player2'],
+      startImmediately: true
+    };
 
-  util.extend(this.options, defaultOptions, options);
+    Util.extendObj(this.options, defaultOptions, options);
 
-  this.setupPlayers();
-  if (this.options.startImmediately) { this.playGame(); }
-}
+    this.setupPlayers();
+    if (this.options.startImmediately) { this.playGame(); }
+  }
 
-Game.prototype = {
-  setupPlayers: function () {
+  setupPlayers () {
     var players = this.options.players;
 
     for (var i = 0; i < players.length; i++) {
@@ -34,17 +34,17 @@ Game.prototype = {
     }
 
     return this.players;
-  },
+  }
 
-  playGame: function () {
+  playGame () {
     this.deck.shuffle();
     this.deal();
     this.showDown();
     this.announceWinner();
-  },
+  }
 
   // Each player gets one card in this game
-  deal: function () {
+  deal () {
     var cardsDealt = [];
     for (var i = 0; i < this.players.length; i++) {
       var card = this.deck.drawCards(1)[0];
@@ -53,10 +53,10 @@ Game.prototype = {
     }
 
     return cardsDealt;
-  },
+  }
 
   // Players cards are compared. High card is the winner. Multiple winners (ties) are possible.
-  showDown: function () {
+  showDown () {
     var winningCardValue = 0;
     var winner = null;
 
@@ -79,9 +79,9 @@ Game.prototype = {
 
     this.winner = winner;
     return this.winner;
-  },
+  }
 
-  announceWinner: function () {
+  announceWinner () {
     if (this.winner instanceof Array) {
       console.log('It was a tie!');
       for (var i = 0; i < this.winner.length; i++) {
@@ -93,7 +93,8 @@ Game.prototype = {
       console.log(this.winner.name + ' won with a ' + this.winner.showCard());
     }
   }
-};
+}
 
 // The dog and cats know how to play too, apparently
+window.Game = Game;
 new Game({ players: ['Ryan', 'Olivia', 'Bailey', 'Gus', 'Alex'] });

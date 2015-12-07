@@ -96,6 +96,15 @@ module.exports = function(grunt) {
           spawn: false,
         }
       },
+
+      webpack: {
+        files: ['dev/**/*.js'],
+        tasks: ['webpack:all'],
+        options: {
+          spawn: false
+        }
+      },
+
       unit: {
         files: ['dev/tests/unit/*.js'],
         tasks: ['unit'],

@@ -1,21 +1,21 @@
-function Player (name) {
-  this.name = name;
-  this.card = null;
-}
+class Player {
+  constructor (name) {
+    this.name = name;
+    this.card = null;
+  }
 
-Player.prototype = {
-  getCard: function () {
+  getCard () {
     return this.card;
-  },
+  }
 
-  setCard: function (card) {
+  setCard (card) {
     this.card = card;
     return this.card;
-  },
+  }
 
-  showCard: function () {
+  showCard () {
     return this.card.toPlainEnglish();
   }
-};
+}
 
-module.exports = Player;
+export default Player;
