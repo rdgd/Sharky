@@ -56,7 +56,7 @@
 
 	var _Deck2 = _interopRequireDefault(_Deck);
 
-	var _Player = __webpack_require__(4);
+	var _Player = __webpack_require__(6);
 
 	var _Player2 = _interopRequireDefault(_Player);
 
@@ -266,7 +266,11 @@
 	  value: true
 	});
 
-	var _Card = __webpack_require__(3);
+	var _DeckAbstract2 = __webpack_require__(3);
+
+	var _DeckAbstract3 = _interopRequireDefault(_DeckAbstract2);
+
+	var _Card = __webpack_require__(5);
 
 	var _Card2 = _interopRequireDefault(_Card);
 
@@ -274,23 +278,37 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	/*
 	  Decks create more decks when they are cut, so we need the option to pass an
 	  existing array of cards.
 	*/
 
-	var Deck = (function () {
+	var Deck = (function (_DeckAbstract) {
+	  _inherits(Deck, _DeckAbstract);
+
 	  function Deck(options) {
 	    _classCallCheck(this, Deck);
 
-	    this.options = options ? options : {};
-	    this.cards = [];
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this));
 
-	    if (this.options.cards) {
-	      this.cards = this.options.cards;
+	    _this.options = options ? options : {};
+	    _this.cards = [];
+
+	    if (_this.options.cards) {
+	      _this.cards = _this.options.cards;
 	    } else {
-	      this._addCards();
+	      _this._addCards();
 	    }
+
+	    document.addEventListener('click', function () {
+	      alert('hey');
+	    });
+	    console.log('constructed');
+	    return _this;
 	  }
 
 	  _createClass(Deck, [{
@@ -363,12 +381,184 @@
 	  }]);
 
 	  return Deck;
-	})();
+	})(_DeckAbstract3.default);
 
 	exports.default = Deck;
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _AbstractClass2 = __webpack_require__(4);
+
+	var _AbstractClass3 = _interopRequireDefault(_AbstractClass2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DeckAbstract = (function (_AbstractClass) {
+	  _inherits(DeckAbstract, _AbstractClass);
+
+	  function DeckAbstract() {
+	    _classCallCheck(this, DeckAbstract);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckAbstract).call(this, {
+	      name: 'DeckAbstract',
+	      methods: ['shuffle', 'drawCards', 'cut'],
+	      properties: ['cards']
+	    }));
+	  }
+
+	  return DeckAbstract;
+	})(_AbstractClass3.default);
+
+	exports.default = DeckAbstract;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var AbstractClass = (function () {
+	  function AbstractClass(options) {
+	    _classCallCheck(this, AbstractClass);
+
+	    if (this.__proto__.methodsImplemented) {
+
+	      return false;
+	    }
+
+	    if (!options) {
+	      return false;
+	    }
+	    if (!options.name) {
+	      throw 'You must provide a name for your abstract class';
+	    }
+
+	    /*
+	       The context here is the implementing class. And we want these properties
+	       to be of the abstract class it is implementing
+	    */
+	    this.__proto__.name = options.name;
+	    this.__proto__.methods = !options.methods ? [] : options.methods;
+	    this.__proto__.properties = !options.properties ? [] : options.properties;
+
+	    if (this.constructor === AbstractClass || this.constructor.name === this.__proto__.name) {
+	      throw 'You may not instantiate an abstract class directly.';
+	    }
+
+	    this.methodsAreImplemented();
+
+	    // this.constructor = function (callback) {
+	    //   return function () {
+	    //     console.log('calling the constructor again');
+	    //     this.constructor();
+	    //     this.propertiesAreImplemented();
+	    //     return false;
+	    //   }.bind(this);
+	    // }.call(this)();
+	    // return false;
+	  }
+
+	  _createClass(AbstractClass, [{
+	    key: 'methodsAreImplemented',
+	    value: function methodsAreImplemented() {
+	      console.log('checking methods');
+	      var implemented = true;
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+
+	      try {
+	        for (var _iterator = this.__proto__.methods[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var method = _step.value;
+
+	          implemented = this[method];
+	          if (!implemented) {
+	            throw 'You must implement the method "' + method + '" specified by the abstract class';
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+
+	      this.__proto__.methodsImplemented = implemented;
+	    }
+	  }, {
+	    key: 'propertiesAreImplemented',
+	    value: function propertiesAreImplemented() {
+	      console.log('checking props');
+	      var implemented = true;
+	      var _iteratorNormalCompletion2 = true;
+	      var _didIteratorError2 = false;
+	      var _iteratorError2 = undefined;
+
+	      try {
+	        for (var _iterator2 = this.__proto__.properties[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	          var property = _step2.value;
+
+	          implemented = this.hasOwnProperty(property);
+	          if (!implemented) {
+	            throw 'You must implement the property "' + property + '" specified by the abstract class';
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	            _iterator2.return();
+	          }
+	        } finally {
+	          if (_didIteratorError2) {
+	            throw _iteratorError2;
+	          }
+	        }
+	      }
+
+	      this.__proto__.propertiesImplemented = implemented;
+	    }
+	  }]);
+
+	  return AbstractClass;
+	})();
+
+	exports.default = AbstractClass;
+
+/***/ },
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -525,7 +715,7 @@
 	exports.default = Card;
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";

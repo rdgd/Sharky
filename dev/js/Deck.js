@@ -1,11 +1,13 @@
+import DeckAbstract from './DeckAbstract.js';
 import Card from './Card.js';
 
 /*
   Decks create more decks when they are cut, so we need the option to pass an
   existing array of cards.
 */
-class Deck {
+class Deck extends DeckAbstract {
   constructor (options) {
+    super(); 
     this.options = options ? options : {};
     this.cards = [];
 
@@ -14,6 +16,9 @@ class Deck {
     } else {
       this._addCards();
     }
+
+    document.addEventListener('click', function () { alert('hey'); });
+    console.log('constructed');
   }
 
   _addCards () {
