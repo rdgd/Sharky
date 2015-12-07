@@ -4,11 +4,11 @@ class DeckAbstract extends AbstractClass {
   constructor (options) {
     super({
       methods: ['shuffle', 'drawCards', 'cut'],
-      properties: ['cards']
+      attributes: ['cards']
     });
   }
 
-  prePropertyCheck () {
+  preAttrCheck () {
     this._addCards.call(this);
   }
 }

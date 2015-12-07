@@ -410,13 +410,13 @@
 
 	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckAbstract).call(this, {
 	      methods: ['shuffle', 'drawCards', 'cut'],
-	      properties: ['cards']
+	      attributes: ['cards']
 	    }));
 	  }
 
 	  _createClass(DeckAbstract, [{
-	    key: 'prePropertyCheck',
-	    value: function prePropertyCheck() {
+	    key: 'preAttrCheck',
+	    value: function preAttrCheck() {
 	      this._addCards.call(this);
 	    }
 	  }]);
@@ -444,35 +444,52 @@
 	  function AbstractClass(contract) {
 	    _classCallCheck(this, AbstractClass);
 
+	    // An abstract class does us no good if it is empty. Must have contract.
 	    if (!contract) {
 	      return false;
 	    }
 
+	    //  We must always have the following three pieces.
 	    var implementation = this.__proto__;
 	    var definition = implementation.__proto__;
 	    var enforcer = definition.__proto__;
 
+	    /*
+	      To minimize abstract class definition footprint,
+	      we set these attributes for the developer.
+	    */
 	    definition.methods = !contract.methods ? [] : contract.methods;
-	    definition.properties = !contract.properties ? [] : contract.properties;
+	    definition.attributes = !contract.attributes ? [] : contract.attributes;
 
+	    // Using the name of this class elsewhere is confusing
 	    if (this.constructor.name === enforcer.constructor.name) {
 	      throw 'You may not name your class "' + this.constructor.name + '"';
 	    }
 
+	    /*
+	      The abstract class definition and this class cannot be instatiated directly
+	      or in other words, the developer must use an appropriately named implementation
+	    */
 	    if (this.constructor === AbstractClass || this.constructor === definition.constructor) {
 	      throw 'You may not instantiate an abstract class directly.';
 	    }
 
+	    // If any setup needs to be done before an integrity check, now's the time
 	    if (definition.preMethodCheck) {
 	      definition.preMethodCheck.call(this.__proto__);
 	    }
 	    this.checkMethods();
 
-	    if (definition.prePropertyCheck) {
-	      definition.prePropertyCheck.call(this.__proto__);
+	    if (definition.preAttrCheck) {
+	      definition.preAttrCheck.call(this.__proto__);
 	    }
-	    this.checkProperties();
+	    this.checkAttrs();
 	  }
+
+	  /*
+	    Iterating over the abstract class definition's required methods, and checking
+	    the implementation for them.
+	  */
 
 	  _createClass(AbstractClass, [{
 	    key: 'checkMethods',
@@ -506,16 +523,22 @@
 	        }
 	      }
 	    }
+
+	    /*
+	      Iterating over the abstract class definition's required properties, and checking
+	      the implementation for them.
+	    */
+
 	  }, {
-	    key: 'checkProperties',
-	    value: function checkProperties() {
+	    key: 'checkAttrs',
+	    value: function checkAttrs() {
 	      var implemented = true;
 	      var _iteratorNormalCompletion2 = true;
 	      var _didIteratorError2 = false;
 	      var _iteratorError2 = undefined;
 
 	      try {
-	        for (var _iterator2 = this.__proto__.properties[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	        for (var _iterator2 = this.__proto__.attributes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	          var property = _step2.value;
 
 	          implemented = this.__proto__.hasOwnProperty(property);
