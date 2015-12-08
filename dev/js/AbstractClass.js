@@ -32,7 +32,7 @@ class AbstractClass {
     /*
       If any setup needs to be done before an integrity check, you may do so
       by implementing the static methods preMethodCheck and preAttrCheck in your
-      class definition  
+      class definition
     */
     if (definition.constructor.preMethodCheck) {
       definition.constructor.preMethodCheck.call(this.__proto__);
@@ -61,8 +61,9 @@ class AbstractClass {
   }
 
   /*
-    Iterating over the abstract class definition's required properties, and checking
-    the implementation for them.
+    Abstract properties are not common, but I figured I would create the option
+    for them, should somebody find it useful. Kind of like C# without enforcing
+    a getter function.
   */
   checkAttrs () {
     var implemented = true;

@@ -1,7 +1,7 @@
 import AbstractClass from './AbstractClass.js';
 
 class DeckAbstract extends AbstractClass {
-  constructor (options) {
+  constructor () {
     super({
       methods: ['shuffle', 'drawCards', 'cut'],
       attributes: ['cards']
