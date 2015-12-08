@@ -29,11 +29,19 @@ class AbstractClass {
       throw 'You may not instantiate an abstract class directly.';
     }
 
-    // If any setup needs to be done before an integrity check, now's the time
-    if (definition.preMethodCheck) { definition.preMethodCheck.call(this.__proto__); }
+    /*
+      If any setup needs to be done before an integrity check, you may do so
+      by implementing the static methods preMethodCheck and preAttrCheck in your
+      class definition  
+    */
+    if (definition.constructor.preMethodCheck) {
+      definition.constructor.preMethodCheck.call(this.__proto__);
+    }
     this.checkMethods();
 
-    if (definition.preAttrCheck) { definition.preAttrCheck.call(this.__proto__); }
+    if (definition.constructor.preAttrCheck) {
+      definition.constructor.preAttrCheck.call(this.__proto__);
+    }
     this.checkAttrs();
   }
 

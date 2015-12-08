@@ -8,7 +8,7 @@ class DeckAbstract extends AbstractClass {
     });
   }
 
-  preAttrCheck () {
+  static preAttrCheck () {
     this._addCards.call(this);
   }
 }
