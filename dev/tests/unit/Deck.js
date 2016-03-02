@@ -1,4 +1,4 @@
-var Deck = require('../../js/Deck.js');
+import Deck from '../../js/Deck.js';
 
 describe('A deck', function () {
   it('has many cards', function () {
@@ -8,7 +8,7 @@ describe('A deck', function () {
 
   it('can be shuffled, which changes the order of the cards', function () {
     var unshuffledDeck = new Deck();
-    var shuffledDeck = new Deck();
+    var shuffledDeck = new Deck().shuffle();
     var isSameOrder = unshuffledDeck.cards.equals(shuffledDeck.cards);
     expect(isSameOrder).toBeFalsy();
   });

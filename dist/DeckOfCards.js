@@ -266,9 +266,9 @@
 	  value: true
 	});
 
-	var _DeckAbstract2 = __webpack_require__(3);
+	var _AbstractDeck2 = __webpack_require__(3);
 
-	var _DeckAbstract3 = _interopRequireDefault(_DeckAbstract2);
+	var _AbstractDeck3 = _interopRequireDefault(_AbstractDeck2);
 
 	var _Card = __webpack_require__(5);
 
@@ -287,14 +287,17 @@
 	  existing array of cards.
 	*/
 
-	var Deck = (function (_DeckAbstract) {
-	  _inherits(Deck, _DeckAbstract);
+	var Deck = (function (_AbstractDeck) {
+	  _inherits(Deck, _AbstractDeck);
 
 	  function Deck(options) {
 	    _classCallCheck(this, Deck);
 
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this));
+
 	    options = options ? options : {};
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this, options));
+	    _this._addCards(options.cards);
+	    return _this;
 	  }
 
 	  _createClass(Deck, [{
@@ -374,7 +377,7 @@
 	  }]);
 
 	  return Deck;
-	})(_DeckAbstract3.default);
+	})(_AbstractDeck3.default);
 
 	exports.default = Deck;
 
@@ -383,8 +386,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -402,29 +403,21 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var DeckAbstract = (function (_AbstractClass) {
-	  _inherits(DeckAbstract, _AbstractClass);
+	var AbstractDeck = (function (_AbstractClass) {
+	  _inherits(AbstractDeck, _AbstractClass);
 
-	  function DeckAbstract() {
-	    _classCallCheck(this, DeckAbstract);
+	  function AbstractDeck() {
+	    _classCallCheck(this, AbstractDeck);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckAbstract).call(this, {
-	      methods: ['shuffle', 'drawCards', 'cut'],
-	      attributes: ['cards']
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AbstractDeck).call(this, {
+	      methods: ['shuffle', 'drawCards', 'cut']
 	    }));
 	  }
 
-	  _createClass(DeckAbstract, null, [{
-	    key: 'preAttrCheck',
-	    value: function preAttrCheck() {
-	      this._addCards.call(this);
-	    }
-	  }]);
-
-	  return DeckAbstract;
+	  return AbstractDeck;
 	})(_AbstractClass3.default);
 
-	exports.default = DeckAbstract;
+	exports.default = AbstractDeck;
 
 /***/ },
 /* 4 */
@@ -450,9 +443,9 @@
 	    }
 
 	    //  We must always have the following three pieces.
-	    var implementation = this.__proto__;
-	    var definition = implementation.__proto__;
-	    var enforcer = definition.__proto__;
+	    var implementation = Object.getPrototypeOf(this);
+	    var definition = Object.getPrototypeOf(implementation);
+	    var enforcer = Object.getPrototypeOf(definition);
 
 	    /*
 	      To minimize abstract class definition footprint,
@@ -480,12 +473,12 @@
 	      class definition
 	    */
 	    if (definition.constructor.preMethodCheck) {
-	      definition.constructor.preMethodCheck.call(this.__proto__);
+	      definition.constructor.preMethodCheck.call(Object.getPrototypeOf(this));
 	    }
 	    this.checkMethods();
 
 	    if (definition.constructor.preAttrCheck) {
-	      definition.constructor.preAttrCheck.call(this.__proto__);
+	      definition.constructor.preAttrCheck.call(Object.getPrototypeOf(this));
 	    }
 	    this.checkAttrs();
 	  }
@@ -504,7 +497,7 @@
 	      var _iteratorError = undefined;
 
 	      try {
-	        for (var _iterator = this.__proto__.methods[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        for (var _iterator = Object.getPrototypeOf(this).methods[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	          var method = _step.value;
 
 	          implemented = this[method];
@@ -543,10 +536,10 @@
 	      var _iteratorError2 = undefined;
 
 	      try {
-	        for (var _iterator2 = this.__proto__.attributes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	        for (var _iterator2 = Object.getPrototypeOf(this).attributes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	          var property = _step2.value;
 
-	          implemented = this.__proto__.hasOwnProperty(property);
+	          implemented = Object.getPrototypeOf(this).hasOwnProperty(property);
 	          if (!implemented) {
 	            throw 'You must implement the property "' + property + '" specified by the abstract class';
 	          }

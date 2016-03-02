@@ -1,5 +1,5 @@
-var Player = require('../../js/Player.js');
-var Card = require('../../js/Card.js');
+import Player from '../../js/Player.js';
+import Card from '../../js/Card.js';
 
 describe('A player', function() {
   it('is instantiated with a name', function () {

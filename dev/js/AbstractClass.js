@@ -4,9 +4,9 @@ class AbstractClass {
     if (!contract) { return false; }
 
     //  We must always have the following three pieces.
-    var implementation = this.__proto__;
-    var definition = implementation.__proto__;
-    var enforcer = definition.__proto__;
+    var implementation = Object.getPrototypeOf(this);
+    var definition = Object.getPrototypeOf(implementation);
+    var enforcer = Object.getPrototypeOf(definition);
 
     /*
       To minimize abstract class definition footprint,
@@ -35,12 +35,12 @@ class AbstractClass {
       class definition
     */
     if (definition.constructor.preMethodCheck) {
-      definition.constructor.preMethodCheck.call(this.__proto__);
+      definition.constructor.preMethodCheck.call(Object.getPrototypeOf(this));
     }
     this.checkMethods();
 
     if (definition.constructor.preAttrCheck) {
-      definition.constructor.preAttrCheck.call(this.__proto__);
+      definition.constructor.preAttrCheck.call(Object.getPrototypeOf(this));
     }
     this.checkAttrs();
   }
@@ -51,7 +51,7 @@ class AbstractClass {
   */
   checkMethods () {
     var implemented = true;
-    for (var method of this.__proto__.methods) {
+    for (var method of Object.getPrototypeOf(this).methods) {
       implemented = this[method];
       if (!implemented) {
         throw 'You must implement the method "' +
@@ -67,8 +67,8 @@ class AbstractClass {
   */
   checkAttrs () {
     var implemented = true;
-    for (var property of this.__proto__.attributes) {
-      implemented = this.__proto__.hasOwnProperty(property);
+    for (var property of Object.getPrototypeOf(this).attributes) {
+      implemented = Object.getPrototypeOf(this).hasOwnProperty(property);
       if (!implemented) {
         throw 'You must implement the property "' +
               property + '" specified by the abstract class';

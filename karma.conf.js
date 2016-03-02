@@ -17,6 +17,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+      './dev/js/DeckOfCards.js'
     ],
 
 

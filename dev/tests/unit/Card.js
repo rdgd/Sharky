@@ -1,4 +1,4 @@
-var Card = require('../../js/Card.js');
+import Card from '../../js/Card.js';
 
 describe('A card', function () {
   it('Has a face value and suit', function () {
