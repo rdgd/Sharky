@@ -6,10 +6,7 @@ module.exports = function(grunt) {
       files: ['Gruntfile.js', 'dev/js/**/*.js'],
       options: {
         esnext: true,
-        proto: true,
-        globals: {
-          jQuery: true
-        }
+        proto: true
       }
     },
     jscs: {
@@ -38,10 +35,10 @@ module.exports = function(grunt) {
     },
     webpack: {
       all: {
-        entry: "./dev/js/DeckOfCards.js",
+        entry: "./dev/js/main.js",
         output: {
           path: "dist/",
-          filename: "DeckOfCards.js",
+          filename: "Deck.js",
         },
         stats: {
           colors: true,
@@ -81,7 +78,11 @@ module.exports = function(grunt) {
       unit: {
         configFile: 'karma.conf.js',
         browsers: ['PhantomJS'],
-        files: [{ src: './node_modules/babel-polyfill/dist/polyfill.js' }, { src: './dev/js/*.js' }, { src: './dev/tests/unit/*.js' }]
+        files: [
+          { src: './node_modules/babel-polyfill/dist/polyfill.js' },
+          { src: './dev/js/*.js' },
+          { src: './dev/tests/unit/*.js' }
+        ]
       }
     },
     watch: {

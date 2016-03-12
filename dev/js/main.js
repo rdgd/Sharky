@@ -1,0 +1,1 @@
+window.Deck = require('./Deck');

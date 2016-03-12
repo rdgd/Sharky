@@ -46,216 +46,10 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _util = __webpack_require__(1);
-
-	var _util2 = _interopRequireDefault(_util);
-
-	var _Deck = __webpack_require__(2);
-
-	var _Deck2 = _interopRequireDefault(_Deck);
-
-	var _Player = __webpack_require__(6);
-
-	var _Player2 = _interopRequireDefault(_Player);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/*
-	  Comparison of cards isn't something intrisic to a Deck. It is more a function of a game.
-	  Our game is simple. High card wins. The game can have up to 49 players, because
-	  anything more than that is a guaranteed tie for first... Approaching that limit
-	  increases the liklihood of a tie, though.
-	*/
-
-	var Game = (function () {
-	  function Game(options) {
-	    _classCallCheck(this, Game);
-
-	    this.options = {};
-	    this.winner = null;
-	    this.deck = new _Deck2.default();
-	    this.players = [];
-
-	    var defaultOptions = {
-	      players: ['player1', 'player2'],
-	      startImmediately: true
-	    };
-
-	    _util2.default.extendObj(this.options, defaultOptions, options);
-
-	    this.setupPlayers();
-	    if (this.options.startImmediately) {
-	      this.playGame();
-	    }
-	  }
-
-	  _createClass(Game, [{
-	    key: 'setupPlayers',
-	    value: function setupPlayers() {
-	      var players = this.options.players;
-
-	      for (var i = 0; i < players.length; i++) {
-	        this.players.push(new _Player2.default(players[i]));
-	      }
-
-	      return this.players;
-	    }
-	  }, {
-	    key: 'playGame',
-	    value: function playGame() {
-	      this.deck.shuffle();
-	      this.deal();
-	      this.showDown();
-	      this.announceWinner();
-	    }
-
-	    // Each player gets one card in this game
-
-	  }, {
-	    key: 'deal',
-	    value: function deal() {
-	      var cardsDealt = [];
-	      for (var i = 0; i < this.players.length; i++) {
-	        var card = this.deck.drawCards(1)[0];
-	        cardsDealt.push(card);
-	        this.players[i].setCard(card);
-	      }
-
-	      return cardsDealt;
-	    }
-
-	    // Players cards are compared. High card is the winner. Multiple winners (ties) are possible.
-
-	  }, {
-	    key: 'showDown',
-	    value: function showDown() {
-	      var winningCardValue = 0;
-	      var winner = null;
-
-	      for (var i = 0; i < this.players.length; i++) {
-	        var player = this.players[i];
-	        var card = player.getCard();
-	        console.log(card);
-	        var cardValue = card.getValue();
-	        if (cardValue > winningCardValue) {
-	          winningCardValue = cardValue;
-	          winner = player;
-	        } else if (cardValue === winningCardValue) {
-	          if (winner instanceof Array) {
-	            winner.push(player);
-	          } else {
-	            winner = [winner, player];
-	          }
-	        }
-	      }
-
-	      this.winner = winner;
-	      return this.winner;
-	    }
-	  }, {
-	    key: 'announceWinner',
-	    value: function announceWinner() {
-	      if (this.winner instanceof Array) {
-	        console.log('It was a tie!');
-	        for (var i = 0; i < this.winner.length; i++) {
-	          var winnerName = this.winner[i].name;
-	          var winnerCard = this.winner[i].showCard();
-	          console.log(winnerName + ' shows a ' + winnerCard);
-	        }
-	      } else {
-	        console.log(this.winner.name + ' won with a ' + this.winner.showCard());
-	      }
-	    }
-	  }]);
-
-	  return Game;
-	})();
-
-	// The dog and cats know how to play too, apparently
-
-	window.Game = Game;
-	new Game({ players: ['Ryan', 'Olivia', 'Bailey', 'Gus', 'Alex'] });
+	window.Deck = __webpack_require__(1);
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Util = (function () {
-	  function Util() {
-	    _classCallCheck(this, Util);
-	  }
-
-	  _createClass(Util, null, [{
-	    key: 'extendObj',
-	    value: function extendObj(out) {
-	      out = out || {};
-
-	      for (var i = 1; i < arguments.length; i++) {
-	        if (!arguments[i]) {
-	          continue;
-	        }
-
-	        for (var key in arguments[i]) {
-	          if (arguments[i].hasOwnProperty(key)) {
-	            out[key] = arguments[i][key];
-	          }
-	        }
-	      }
-
-	      return out;
-	    }
-	  }]);
-
-	  return Util;
-	})();
-
-	exports.default = Util;
-
-	// Attach the .equals method to Array's prototype to call it on any array
-
-	Array.prototype.equals = function (array) {
-	  // If the other array is a falsy value, return
-	  if (!array) {
-	    return false;
-	  }
-
-	  // Compare lengths - can save a lot of time
-	  if (this.length != array.length) {
-	    return false;
-	  }
-	  for (var i = 0, l = this.length; i < l; i++) {
-	    // Check if we have nested arrays
-	    if (this[i] instanceof Array && array[i] instanceof Array) {
-	      // Recurse into the nested arrays
-	      if (!this[i].equals(array[i])) {
-	        return false;
-	      }
-	    } else if (this[i] != array[i]) {
-	      // Warning - two different object instances will never be equal: {x:20} != {x:20}
-	      return false;
-	    }
-	  }
-	  return true;
-	};
-	// Hide method from for-in loops
-	Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -266,11 +60,11 @@
 	  value: true
 	});
 
-	var _AbstractDeck2 = __webpack_require__(3);
+	var _AbstractDeck2 = __webpack_require__(2);
 
 	var _AbstractDeck3 = _interopRequireDefault(_AbstractDeck2);
 
-	var _Card = __webpack_require__(5);
+	var _Card = __webpack_require__(4);
 
 	var _Card2 = _interopRequireDefault(_Card);
 
@@ -382,7 +176,7 @@
 	exports.default = Deck;
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -391,7 +185,7 @@
 	  value: true
 	});
 
-	var _AbstractClass2 = __webpack_require__(4);
+	var _AbstractClass2 = __webpack_require__(3);
 
 	var _AbstractClass3 = _interopRequireDefault(_AbstractClass2);
 
@@ -420,7 +214,7 @@
 	exports.default = AbstractDeck;
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -567,7 +361,7 @@
 	exports.default = AbstractClass;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -722,51 +516,6 @@
 	})();
 
 	exports.default = Card;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Player = (function () {
-	  function Player(name) {
-	    _classCallCheck(this, Player);
-
-	    this.name = name;
-	    this.card = null;
-	  }
-
-	  _createClass(Player, [{
-	    key: "getCard",
-	    value: function getCard() {
-	      return this.card;
-	    }
-	  }, {
-	    key: "setCard",
-	    value: function setCard(card) {
-	      this.card = card;
-	      return this.card;
-	    }
-	  }, {
-	    key: "showCard",
-	    value: function showCard() {
-	      return this.card.toPlainEnglish();
-	    }
-	  }]);
-
-	  return Player;
-	})();
-
-	exports.default = Player;
 
 /***/ }
 /******/ ]);
