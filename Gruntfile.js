@@ -52,7 +52,6 @@ module.exports = function(grunt) {
           loaders: [
             {
               test: /\.js$/,
-              exclude: /node_modules/,
               loader: "babel-loader",
               query: {
                 presets: ['es2015']
@@ -80,6 +79,7 @@ module.exports = function(grunt) {
         browsers: ['PhantomJS'],
         files: [
           { src: './node_modules/babel-polyfill/dist/polyfill.js' },
+          { src: './node_modules/abstract-class-harmony/dev/js/AbstractClass.js' },
           { src: './dev/js/*.js' },
           { src: './dev/tests/unit/*.js' }
         ]

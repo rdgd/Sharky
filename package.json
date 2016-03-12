@@ -6,6 +6,7 @@
   "license": "Unsure",
   "homepage": "",
   "devDependencies": {
+    "abstract-class-harmony": "^1.2.0",
     "babel-core": "^6.3.15",
     "babel-loader": "^6.2.0",
     "babel-polyfill": "^6.6.1",

@@ -1,4 +1,4 @@
-import AbstractClass from './AbstractClass.js';
+import AbstractClass from '../../node_modules/abstract-class-harmony/dev/js/AbstractClass.js';
 
 class AbstractDeck extends AbstractClass {
   constructor () {
